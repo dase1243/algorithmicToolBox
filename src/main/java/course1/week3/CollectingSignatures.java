@@ -1,18 +1,17 @@
 package course1.week3;
 
-import javafx.util.Pair;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CollectingSignatures {
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(reader.readLine());
-        List<Pair<Integer, Integer>> pairList = new ArrayList<>();
+        List<Pair> pairList = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             String[] mass = reader.readLine().split(" ");
             int value1 = Integer.parseInt(mass[0]);
@@ -20,33 +19,68 @@ public class CollectingSignatures {
             pairList.add(new Pair(value1, value2));
         }
         reader.close();
-        System.out.println(collectingSignatures(pairList));
+        collectingSignatures(pairList);
     }
 
-    private static int collectingSignatures(List<Pair<Integer, Integer>> pairList) {
-        List<Integer> points = new ArrayList<>();
-        pairList.stream().sorted((o1, o2) -> {
-            if (o1.getKey() > o2.getKey()) {
+    private static void collectingSignatures(List<Pair> pairList) {
+        pairList = pairList.stream().sorted((o1, o2) -> {
+            if (o1.getRight() > o2.getRight()) {
                 return 1;
-            } else if (o1.getKey() < o2.getKey()) {
+            } else if (o1.getRight() < o2.getRight()) {
                 return -1;
             } else {
                 return 0;
             }
-        });
-        int pointsNum = 0;
-        for (int j = 0; j < pairList.size(); j++) {
-            int currentPoint = 0;
-            int left = pairList.get(j).getKey();
-            int right = pairList.get(j).getKey();
-//            for (int i = pairList.get(j).getKey(); i <= pairList.get(i).getValue(); i++) {
-            for (int k = j + 1; k < pairList.size(); k++) {
-                if (left <= pairList.get(k).getKey() && pairList.get(k).getKey() <= right) {
-//                    currentPoint = k
+        }).collect(Collectors.toList());
+
+        List<Integer> pointList = new ArrayList<>();
+
+        while (pairList.size() != 0) {
+
+            int minRight = pairList.get(0).getRight();
+            pointList.add(minRight);
+            int i = 0;
+            while (i != pairList.size()) {
+                int value = pairList.get(i).getRight();
+                int key = pairList.get(i).getLeft();
+
+                if (key <= minRight && minRight <= value) {
+                    pairList.remove(i);
+                    continue;
                 }
+                i++;
             }
-//            }
         }
-        return 0;
+
+        System.out.println(pointList.size());
+        for (Integer integer : pointList) {
+            System.out.print(integer + " ");
+        }
+    }
+
+    static class Pair {
+        int left;
+        int right;
+
+        public Pair(int left, int right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        public int getLeft() {
+            return left;
+        }
+
+        public void setLeft(int left) {
+            this.left = left;
+        }
+
+        public int getRight() {
+            return right;
+        }
+
+        public void setRight(int right) {
+            this.right = right;
+        }
     }
 }

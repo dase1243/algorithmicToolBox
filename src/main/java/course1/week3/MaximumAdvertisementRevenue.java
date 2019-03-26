@@ -11,23 +11,23 @@ public class MaximumAdvertisementRevenue {
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(reader.readLine());
+        long n = Long.parseLong(reader.readLine());
 
         String[] massFee = reader.readLine().split(" ");
-        List<Integer> feeList = Arrays.stream(massFee).map(Integer::parseInt).collect(Collectors.toList());
+        List<Long> feeList = Arrays.stream(massFee).map(Long::parseLong).collect(Collectors.toList());
 
         String[] massClicks = reader.readLine().split(" ");
-        List<Integer> clickList = Arrays.stream(massClicks).map(Integer::parseInt).collect(Collectors.toList());
+        List<Long> clickList = Arrays.stream(massClicks).map(Long::parseLong).collect(Collectors.toList());
 
         reader.close();
 
         System.out.println(maximumAdvertisementRevenue(feeList, clickList));
     }
 
-    private static int maximumAdvertisementRevenue(List<Integer> feeList, List<Integer> clickList) {
-        feeList.sort(Integer::compareTo);
-        clickList.sort(Integer::compareTo);
-        int total = 0;
+    private static long maximumAdvertisementRevenue(List<Long> feeList, List<Long> clickList) {
+        feeList.sort(Long::compareTo);
+        clickList.sort(Long::compareTo);
+        long total = 0;
         for (int i = 0; i < feeList.size(); i++) {
             total += feeList.get(i) * clickList.get(i);
         }
